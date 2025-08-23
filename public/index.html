@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Weather Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="weather-app" id="weatherApp">
+        <!-- Loading state -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-spinner"></div>
+            <p>Loading weather data...</p>
+        </div>
+        
+        <!-- Main content -->
+        <header class="app-header">
+            <h1>Local Weather Dashboard</h1>
+            <div class="location-display" id="locationDisplay">
+                <span id="currentLocation">Getting location...</span>
+                <button class="change-location-btn" id="changeLocationBtn" title="Change location">
+                    📍
+                </button>
+            </div>
+            <div class="last-updated" id="lastUpdated"></div>
+        </header>
+        
+        <main class="weather-content">
+            <!-- Current Weather Panel -->
+            <section class="current-weather" id="currentWeather">
+                <div class="current-temp" id="currentTemp">--°</div>
+                <div class="current-conditions" id="currentConditions">Loading...</div>
+                <div class="current-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Wind</span>
+                        <span class="detail-value" id="currentWind">-- mph</span>
+                    </div>
+                    <div class="detail-item" id="airQualitySection" style="display: none;">
+                        <span class="detail-label">Air Quality</span>
+                        <span class="detail-value" id="airQuality">--</span>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Forecast Section -->
+            <section class="forecast-section">
+                <h2>7-Day Forecast</h2>
+                <div class="forecast-container" id="forecastContainer">
+                    <!-- Forecast cards will be populated by JavaScript -->
+                    <div class="forecast-loading">
+                        <div class="loading-spinner small"></div>
+                        <p>Loading forecast...</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="app-footer">
+            <button class="refresh-btn" id="refreshBtn" title="Refresh weather data">
+                🔄 Refresh
+            </button>
+            <div class="app-info">
+                Weather data from <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a>
+            </div>
+        </footer>
+        
+        <!-- Location Search Modal -->
+        <div class="modal-overlay" id="locationModal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Change Location</h3>
+                    <button class="modal-close" id="modalClose" title="Close">×</button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" 
+                           id="locationSearch" 
+                           placeholder="Search city, state, or country..."
+                           autocomplete="off">
+                    <div class="search-results" id="searchResults"></div>
+                    <div class="location-actions">
+                        <button class="use-gps-btn" id="useGpsBtn" title="Use current location">
+                            📍 Use My Location
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Error toast -->
+        <div class="error-toast" id="errorToast" style="display: none;">
+            <span id="errorMessage"></span>
+            <button class="toast-close" id="toastClose">×</button>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

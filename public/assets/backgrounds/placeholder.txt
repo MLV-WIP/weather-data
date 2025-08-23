@@ -1,0 +1,46 @@
+# Vintage Weather Background Images
+
+This directory contains vintage-style weather background images that give the app an old-timey, sepia-toned aesthetic.
+
+## ✅ Current Vintage Images (1920x1080):
+
+### Clear Conditions
+- sunny-blue-sky.jpg - Vintage sunny day with antique sun rays
+- starry-night.jpg - Old-timey night sky with cross-shaped stars and crescent moon
+
+### Cloudy Conditions  
+- partly-cloudy-day.jpg - Vintage partly cloudy day
+- cloudy-night.jpg - Old photograph style cloudy night
+- overcast-clouds.jpg - Aged cloudy sky with antique cloud formations
+
+### Rain Conditions
+- heavy-rain.jpg - Vintage stormy weather with old-fashioned diagonal rain
+
+### Storm Conditions
+- lightning-storm.jpg - Dramatic vintage storm with jagged lightning bolts
+
+### Snow Conditions
+- gentle-snowfall.jpg - Gentle vintage snowfall like old Christmas cards
+- heavy-snow.jpg - Heavy vintage snowstorm with cross-shaped snowflakes
+
+### Atmospheric Conditions
+- misty-fog.jpg - Mysterious vintage fog like old gothic novels
+- morning-mist.jpg - Romantic morning mist in vintage style
+
+## Vintage Style Features:
+- **Sepia Color Palettes**: Aged paper, old photograph tones
+- **Period Elements**: Antique suns, vintage star patterns, classic cloud formations
+- **Aged Effects**: Paper texture overlays, vignetting, reduced contrast
+- **Artistic Details**: Hand-drawn style weather elements
+- **File Size**: ~35-45KB each (optimized)
+
+## Regenerating Images:
+The vintage backgrounds were generated using a custom Python script with PIL that creates:
+- Sepia tone transformations
+- Vintage color gradients
+- Period-appropriate weather patterns
+- Old paper texture effects
+- Photographic vignetting
+
+## Fallback Behavior:
+If images are missing, the app will use CSS gradient backgrounds as fallbacks.
