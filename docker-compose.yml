@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  weather-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: local-weather-app:latest
+    container_name: weather-app
+    ports:
+      - "8080:3000"  # Map host port 8080 to container port 3000
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    restart: unless-stopped
+    # volumes:
+      # Optional: Mount custom background images
+      # - "./custom-backgrounds:/app/public/assets/backgrounds"
+      # Optional: Mount logs directory
+      # - "./logs:/app/logs"
+    networks:
+      - weather-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/api/weather/current?lat=47.6062&lng=-122.3321', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "com.docker.compose.project=weather-app"
+      - "description=Local Weather Dashboard with Dynamic Backgrounds"
+
+networks:
+  weather-network:
+    driver: bridge
+    name: weather-app-network
+
+# Optional: Add a volume for persistent data if needed in the future
+volumes:
+  weather-data:
+    driver: local
