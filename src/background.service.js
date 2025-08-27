@@ -1,53 +1,54 @@
 class BackgroundService {
     constructor() {
+        // Map weather conditions to base filenames (without variant numbers)
         this.backgroundMapping = {
             clear: {
-                day: 'sunny-blue-sky.jpg',
-                night: 'starry-night.jpg'
+                day: 'sunny-blue-sky',
+                night: 'starry-night'
             },
             partly_cloudy: {
-                day: 'partly-cloudy-day.jpg',
-                night: 'cloudy-night.jpg'
+                day: 'partly-cloudy-day',
+                night: 'cloudy-night'
             },
             cloudy: {
-                day: 'overcast-clouds.jpg',
-                night: 'overcast-night.jpg'
+                day: 'overcast-clouds',
+                night: 'cloudy-night'
             },
             light_rain: {
-                day: 'light-rain.jpg',
-                night: 'light-rain-night.jpg'
+                day: 'heavy-rain',
+                night: 'heavy-rain'
             },
             rain: {
-                day: 'heavy-rain.jpg',
-                night: 'heavy-rain.jpg'
+                day: 'heavy-rain',
+                night: 'heavy-rain'
             },
             heavy_rain: {
-                day: 'heavy-rain.jpg',
-                night: 'heavy-rain.jpg'
+                day: 'heavy-rain',
+                night: 'heavy-rain'
             },
             thunderstorm: {
-                day: 'lightning-storm.jpg',
-                night: 'lightning-storm.jpg'
+                day: 'lightning-storm',
+                night: 'lightning-storm'
             },
             light_snow: {
-                day: 'gentle-snowfall.jpg',
-                night: 'gentle-snowfall.jpg'
+                day: 'gentle-snowfall',
+                night: 'gentle-snowfall'
             },
             snow: {
-                day: 'heavy-snow.jpg',
-                night: 'heavy-snow.jpg'
+                day: 'heavy-snow',
+                night: 'heavy-snow'
             },
             heavy_snow: {
-                day: 'heavy-snow.jpg',
-                night: 'heavy-snow.jpg'
+                day: 'heavy-snow',
+                night: 'heavy-snow'
             },
             fog: {
-                day: 'misty-fog.jpg',
-                night: 'misty-fog.jpg'
+                day: 'misty-fog',
+                night: 'misty-fog'
             },
             mist: {
-                day: 'morning-mist.jpg',
-                night: 'morning-mist.jpg'
+                day: 'morning-mist',
+                night: 'morning-mist'
             }
         };
         
@@ -59,6 +60,14 @@ class BackgroundService {
             thunderstorm: 'linear-gradient(180deg, #2c3e50, #4a6741)',
             fog: 'linear-gradient(180deg, #bdc3c7, #95a5a6)'
         };
+        
+        // Number of variants available for each image type
+        this.imageVariants = 4; // We have 4 variants per condition
+    }
+    
+    getRandomVariant() {
+        // Generate random number between 1 and 4
+        return Math.floor(Math.random() * this.imageVariants) + 1;
     }
     
     getBackgroundForWeather(condition, isDay = true, season = null) {
@@ -67,33 +76,50 @@ class BackgroundService {
         
         // Check for exact match
         if (this.backgroundMapping[normalizedCondition]) {
-            const backgroundFile = this.backgroundMapping[normalizedCondition][timeOfDay] ||
-                                 this.backgroundMapping[normalizedCondition]['day'];
+            const baseFilename = this.backgroundMapping[normalizedCondition][timeOfDay] ||
+                               this.backgroundMapping[normalizedCondition]['day'];
+            
+            // Add random variant number
+            const variant = this.getRandomVariant();
+            const backgroundFile = `${baseFilename}-${variant}.jpg`;
             
             return {
                 type: 'image',
                 source: `/assets/backgrounds/${backgroundFile}`,
-                fallback: this.fallbackGradients[normalizedCondition] || this.fallbackGradients.clear
+                fallback: this.fallbackGradients[normalizedCondition] || this.fallbackGradients.clear,
+                variant: variant,
+                baseCondition: baseFilename
             };
         }
         
         // Check for partial matches
         for (const [key, value] of Object.entries(this.backgroundMapping)) {
             if (normalizedCondition.includes(key) || key.includes(normalizedCondition)) {
-                const backgroundFile = value[timeOfDay] || value['day'];
+                const baseFilename = value[timeOfDay] || value['day'];
+                const variant = this.getRandomVariant();
+                const backgroundFile = `${baseFilename}-${variant}.jpg`;
+                
                 return {
                     type: 'image',
                     source: `/assets/backgrounds/${backgroundFile}`,
-                    fallback: this.fallbackGradients[key] || this.fallbackGradients.clear
+                    fallback: this.fallbackGradients[key] || this.fallbackGradients.clear,
+                    variant: variant,
+                    baseCondition: baseFilename
                 };
             }
         }
         
         // Default fallback
+        const defaultBase = this.backgroundMapping.clear[timeOfDay];
+        const variant = this.getRandomVariant();
+        const backgroundFile = `${defaultBase}-${variant}.jpg`;
+        
         return {
             type: 'image',
-            source: `/assets/backgrounds/${this.backgroundMapping.clear[timeOfDay]}`,
-            fallback: this.fallbackGradients.clear
+            source: `/assets/backgrounds/${backgroundFile}`,
+            fallback: this.fallbackGradients.clear,
+            variant: variant,
+            baseCondition: defaultBase
         };
     }
     
@@ -101,13 +127,17 @@ class BackgroundService {
         const backgrounds = [];
         
         for (const [condition, timeVariants] of Object.entries(this.backgroundMapping)) {
-            for (const [timeOfDay, filename] of Object.entries(timeVariants)) {
-                backgrounds.push({
-                    condition,
-                    timeOfDay,
-                    filename,
-                    path: `/assets/backgrounds/${filename}`
-                });
+            for (const [timeOfDay, baseFilename] of Object.entries(timeVariants)) {
+                // Add all 4 variants for this condition/time combination
+                for (let variant = 1; variant <= this.imageVariants; variant++) {
+                    backgrounds.push({
+                        condition,
+                        timeOfDay,
+                        variant,
+                        filename: `${baseFilename}-${variant}.jpg`,
+                        path: `/assets/backgrounds/${baseFilename}-${variant}.jpg`
+                    });
+                }
             }
         }
         
@@ -120,6 +150,29 @@ class BackgroundService {
         
         const fullPath = path.join(__dirname, '..', 'public', backgroundPath);
         return fs.existsSync(fullPath);
+    }
+    
+    // New method to get all variants for a specific condition
+    getAllVariantsForCondition(condition, isDay = true) {
+        const timeOfDay = isDay ? 'day' : 'night';
+        const normalizedCondition = condition.toLowerCase();
+        
+        if (this.backgroundMapping[normalizedCondition]) {
+            const baseFilename = this.backgroundMapping[normalizedCondition][timeOfDay] ||
+                               this.backgroundMapping[normalizedCondition]['day'];
+            
+            const variants = [];
+            for (let i = 1; i <= this.imageVariants; i++) {
+                variants.push({
+                    variant: i,
+                    filename: `${baseFilename}-${i}.jpg`,
+                    path: `/assets/backgrounds/${baseFilename}-${i}.jpg`
+                });
+            }
+            return variants;
+        }
+        
+        return [];
     }
 }
 
