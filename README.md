@@ -1,6 +1,6 @@
 # Local Weather App
 
-A beautiful, responsive weather application that displays comprehensive weather data with dynamic background images that reflect current weather conditions. The app runs locally and provides detailed 7-day forecasts with temperature, precipitation, humidity, and air quality information.
+A beautiful, responsive weather application that displays comprehensive weather data with dynamic rotating background images that reflect current weather conditions. Fully containerized with Docker for easy deployment, the app runs locally and provides detailed 7-day forecasts with temperature, precipitation, humidity, and air quality information.
 
 ## Features
 
@@ -10,11 +10,12 @@ A beautiful, responsive weather application that displays comprehensive weather 
 - **Air Quality**: AQI readings and health categories (when available)
 - **Auto-refresh**: Updates every 30 minutes automatically
 
-### 🎨 Dynamic Vintage Backgrounds
+### 🎨 Dynamic Rotating Backgrounds
 - **Weather-responsive**: Background changes based on current conditions
-- **Vintage Aesthetic**: Beautiful old-timey, sepia-toned backgrounds
-- **Period Elements**: Antique suns, cross-shaped stars, vintage cloud formations
-- **Aged Effects**: Paper textures, vignetting, and sepia color palettes
+- **Image Rotation**: 4 unique images per weather condition (36 total images)
+- **Variety**: Different image on each refresh, even for same weather
+- **High-Quality**: Professional stock photography optimized for web
+- **Smart Selection**: Pseudo-random rotation for engaging user experience
 - **Smooth Transitions**: Beautiful fade effects between weather changes
 - **Fallback System**: CSS gradients when images aren't available
 
@@ -27,21 +28,29 @@ A beautiful, responsive weather application that displays comprehensive weather 
 
 ### 🔧 Technical Features
 - **No API Keys Required**: Uses free Open-Meteo weather service
-- **Local Development**: Runs entirely on your machine
+- **Docker Ready**: Fully containerized with Docker Compose
 - **Modern Tech Stack**: Node.js, Express, vanilla JavaScript
 - **Caching System**: Smart caching reduces API calls and improves performance
+- **Security Hardened**: Non-root container execution and health monitoring
+- **Production Ready**: Optimized container builds and deployment workflows
 
 ## Quick Start
 
-### Prerequisites
-- Node.js (v16 or higher)
-- Modern web browser
-
-### Installation
+### Option 1: Docker (Recommended)
 ```bash
+# Prerequisites: Docker and Docker Compose
 # Clone or download the project
 cd weather-app
 
+# Start with Docker Compose
+docker compose up --build
+```
+
+The app will be available at `http://localhost:8080`
+
+### Option 2: Node.js Development
+```bash
+# Prerequisites: Node.js (v16 or higher)
 # Install dependencies
 npm install
 
@@ -53,7 +62,10 @@ The app will be available at `http://localhost:3000`
 
 ### Production
 ```bash
-# Start in production mode
+# Docker (recommended)
+docker compose up -d
+
+# Or Node.js
 npm start
 ```
 
@@ -88,10 +100,12 @@ NODE_ENV=development
 ```
 
 ### Background Images
-Add weather background images to `public/assets/backgrounds/`:
-- Images should be 1920x1080 pixels, ~200KB each
-- See `public/assets/backgrounds/placeholder.txt` for required filenames
-- The app works without images using gradient fallbacks
+The app includes 36 high-quality stock images (4 variants per weather condition):
+- **Format**: JPEG, optimized for web delivery
+- **Resolution**: 1920x1080 pixels for various screen sizes
+- **Rotation**: Server-side selection of random variants
+- **Fallback**: CSS gradients when images fail to load
+- **Container**: All images bundled in Docker container
 
 ## API Endpoints
 
@@ -133,18 +147,25 @@ node test/test-weather-api.js
 
 ## Deployment
 
-### Local Network Access
-To access from other devices on your network:
+### Docker Deployment (Recommended)
 ```bash
-# Find your local IP address
-ifconfig | grep inet
+# Production deployment
+docker compose up -d
 
-# Start server binding to all interfaces
-PORT=3000 node server.js
-# Then access via http://YOUR_LOCAL_IP:3000
+# View logs
+docker compose logs -f
+
+# Stop services
+docker compose down
+
+# Rebuild and restart
+docker compose up --build -d
 ```
 
-### Production Deployment
+### Local Network Access
+Docker deployment is accessible on your local network at `http://YOUR_LOCAL_IP:8080`
+
+### Traditional Node.js Deployment
 ```bash
 # Using PM2 process manager
 npm install -g pm2
@@ -208,11 +229,16 @@ MIT License - see LICENSE file for details
 - Check if GPS is enabled on device
 
 **Images not loading**
-- Add background images to `public/assets/backgrounds/`
+- Ensure Docker container includes background assets
 - App works with gradient fallbacks if images missing
-- Check image file names match expected format
+- Check container logs: `docker compose logs weather-app`
 
 **Server won't start**
-- Ensure port 3000 is available
-- Check Node.js version (needs v16+)
-- Run `npm install` to install dependencies
+- **Docker**: Ensure Docker is running and port 8080 is available
+- **Node.js**: Ensure port 3000 is available and Node.js v16+
+- Run `npm install` for Node.js or rebuild Docker container
+
+**Container issues**
+- Rebuild container: `docker compose build --no-cache`
+- Check container health: `docker compose ps`
+- View detailed logs: `docker compose logs -f weather-app`
