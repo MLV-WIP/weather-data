@@ -56,8 +56,8 @@ jspm_packages/
 ehthumbs.db
 Thumbs.db
 
-# Git
-.git
+# Git (commented out to allow local commit detection)
+# .git
 .gitignore
 
 # Documentation (optional - remove if you want docs in container)

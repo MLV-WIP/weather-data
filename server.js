@@ -116,6 +116,29 @@ app.get('/api/location/ip', async (req, res) => {
     }
 });
 
+app.get('/api/version', (req, res) => {
+    try {
+        const fs = require('fs');
+        const path = require('path');
+        const versionPath = path.join(__dirname, 'version.json');
+        
+        if (fs.existsSync(versionPath)) {
+            const versionData = JSON.parse(fs.readFileSync(versionPath, 'utf8'));
+            res.json(versionData);
+        } else {
+            // Fallback for development environment
+            res.json({
+                commitSha: 'dev',
+                buildDate: new Date().toISOString(),
+                version: 'development'
+            });
+        }
+    } catch (error) {
+        console.error('Version endpoint error:', error);
+        res.status(500).json({ error: 'Failed to get version info' });
+    }
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);

@@ -314,6 +314,13 @@ body {
     padding-top: var(--spacing-large);
 }
 
+.app-footer-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--spacing-medium);
+}
+
 .refresh-btn {
     background: var(--primary-bg);
     border: none;
@@ -347,6 +354,13 @@ body {
 
 .app-info a:hover {
     text-decoration: underline;
+}
+
+.version-info {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: var(--spacing-xs);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 /* Modal styles */

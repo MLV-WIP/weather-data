@@ -1,0 +1,56 @@
+name: Docker Compose Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Create test environment file
+      run: |
+        echo "NODE_ENV=production" > .env
+        echo "PORT=3000" >> .env
+
+    - name: Generate version file for testing
+      run: ./generate-version.sh
+
+    - name: Build and test with Docker Compose
+      run: |
+        docker compose build
+        docker compose up -d
+        sleep 30  # Wait for container to be ready
+
+    - name: Health check
+      run: |
+        # Test that the container is running
+        docker compose ps
+        
+        # Test API endpoints
+        curl -f http://localhost:8080/api/weather/current?lat=47.6062&lng=-122.3321 || exit 1
+        curl -f http://localhost:8080/api/weather/forecast?lat=47.6062&lng=-122.3321&days=7 || exit 1
+        curl -f http://localhost:8080/api/version || exit 1
+        
+        # Test web interface
+        curl -f http://localhost:8080/ || exit 1
+        
+        echo "All tests passed!"
+
+    - name: Container logs (on failure)
+      if: failure()
+      run: |
+        echo "=== Container Status ==="
+        docker compose ps
+        echo "=== Container Logs ==="
+        docker compose logs
+
+    - name: Cleanup
+      if: always()
+      run: docker compose down

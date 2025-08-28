@@ -1,5 +1,8 @@
 # Local Weather App
 
+[![Build and Push Docker Image](https://github.com/USER/REPO/actions/workflows/docker-build.yml/badge.svg)](https://github.com/USER/REPO/actions/workflows/docker-build.yml)
+[![Docker Compose Test](https://github.com/USER/REPO/actions/workflows/docker-compose-test.yml/badge.svg)](https://github.com/USER/REPO/actions/workflows/docker-compose-test.yml)
+
 A beautiful, responsive weather application that displays comprehensive weather data with dynamic rotating background images that reflect current weather conditions. Fully containerized with Docker for easy deployment, the app runs locally and provides detailed 14-day forecasts with temperature, precipitation, humidity, and air quality information.
 
 ## Note
@@ -46,8 +49,8 @@ This app was created entirely via iterative refinement with Claude code AI.
 # Clone or download the project
 cd weather-app
 
-# Start with Docker Compose
-docker compose up --build
+# Start with Docker Compose (includes version generation)
+npm run docker:compose
 ```
 
 The app will be available at `http://localhost:8080`
@@ -177,6 +180,36 @@ pm2 start server.js --name "weather-app"
 pm2 startup
 pm2 save
 ```
+
+## CI/CD & Automation
+
+### GitHub Actions Workflows
+The repository includes automated CI/CD pipelines:
+
+**Docker Build Pipeline** (`.github/workflows/docker-build.yml`)
+- Triggers on pushes to `main` and `develop` branches
+- Builds multi-architecture Docker images (amd64, arm64)
+- Pushes to GitHub Container Registry (ghcr.io)
+- Includes build caching for faster builds
+- Tags images with branch name, SHA, and `latest` for main branch
+
+**Docker Compose Testing** (`.github/workflows/docker-compose-test.yml`)
+- Tests complete application stack with Docker Compose
+- Runs health checks on API endpoints and web interface
+- Validates container startup and functionality
+- Provides debugging output on failures
+
+### Using Pre-built Images
+```bash
+# Pull and run the latest image from GitHub Container Registry
+docker run -p 8080:3000 ghcr.io/USER/REPO:latest
+
+# Or use with Docker Compose by updating docker-compose.yml:
+# image: ghcr.io/USER/REPO:latest
+# comment out: build: .
+```
+
+**Note**: Replace `USER/REPO` in URLs and commands with your actual GitHub username and repository name.
 
 ## Data Sources
 

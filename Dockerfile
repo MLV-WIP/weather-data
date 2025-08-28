@@ -17,6 +17,8 @@ RUN npm ci --only=production --silent && \
 # Copy application source code
 COPY . .
 
+# Copy pre-generated version file (should be created by generate-version.sh before build)
+
 # Create necessary directories and set permissions
 RUN mkdir -p public/assets/backgrounds && \
     chown -R weather:weather /app

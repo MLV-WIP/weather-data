@@ -12,6 +12,7 @@ class WeatherApp {
         this.bindEvents();
         await this.initializeLocation();
         this.startAutoRefresh();
+        await this.loadVersionInfo();
     }
     
     bindEvents() {
@@ -481,6 +482,29 @@ class WeatherApp {
         } catch (error) {
             return '--';
         }
+    }
+    
+    async loadVersionInfo() {
+        try {
+            const response = await fetch('/api/version');
+            if (!response.ok) return;
+            
+            const versionInfo = await response.json();
+            this.displayVersionInfo(versionInfo);
+        } catch (error) {
+            console.log('Version info not available:', error);
+        }
+    }
+    
+    displayVersionInfo(versionInfo) {
+        const versionElement = document.getElementById('versionInfo');
+        if (!versionElement) return;
+        
+        const shortSha = versionInfo.commitSha && versionInfo.commitSha !== 'dev' 
+            ? versionInfo.commitSha.substring(0, 8)
+            : versionInfo.commitSha;
+            
+        versionElement.textContent = `Build ${shortSha}`;
     }
     
     saveLocation() {
