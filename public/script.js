@@ -169,7 +169,7 @@ class WeatherApp {
             // Load current weather and forecast in parallel
             const [currentResponse, forecastResponse] = await Promise.all([
                 fetch(`/api/weather/current?lat=${this.currentLocation.latitude}&lng=${this.currentLocation.longitude}`),
-                fetch(`/api/weather/forecast?lat=${this.currentLocation.latitude}&lng=${this.currentLocation.longitude}&days=7`)
+                fetch(`/api/weather/forecast?lat=${this.currentLocation.latitude}&lng=${this.currentLocation.longitude}&days=14`)
             ]);
             
             if (!currentResponse.ok || !forecastResponse.ok) {
@@ -234,7 +234,7 @@ class WeatherApp {
         if (!this.weatherData) return;
         
         document.getElementById('currentTemp').textContent = `${this.weatherData.temperature}°F`;
-        document.getElementById('currentConditions').textContent = this.formatCondition(this.weatherData.condition);
+        document.getElementById('currentConditions').innerHTML = `${this.getWeatherIcon(this.weatherData.condition, this.weatherData.isDay)} ${this.formatCondition(this.weatherData.condition)}`;
         document.getElementById('currentWind').textContent = `${Math.round(this.weatherData.windSpeed)} mph`;
         
         // Update air quality if available
@@ -273,7 +273,7 @@ class WeatherApp {
                 <span class="temp-high">${dayData.tempMax}°</span>
                 <span class="temp-low">${dayData.tempMin}°</span>
             </div>
-            <div class="forecast-condition">${this.formatCondition(dayData.condition)}</div>
+            <div class="forecast-condition">${this.getWeatherIcon(dayData.condition, true)} ${this.formatCondition(dayData.condition)}</div>
             <div class="forecast-details">
                 <span>💧 ${dayData.precipitationChance}%</span>
                 <span>💨 ${dayData.humidity}%</span>
@@ -444,6 +444,24 @@ class WeatherApp {
     
     formatCondition(condition) {
         return condition.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    }
+    
+    getWeatherIcon(condition, isDay = true) {
+        const icons = {
+            clear: isDay ? '☀️' : '🌙',
+            partly_cloudy: isDay ? '⛅' : '🌙',
+            cloudy: '☁️',
+            fog: '🌫️',
+            light_rain: '🌦️',
+            rain: '🌧️',
+            heavy_rain: '🌧️',
+            light_snow: '🌨️',
+            snow: '❄️',
+            heavy_snow: '❄️',
+            thunderstorm: '⛈️'
+        };
+        
+        return icons[condition] || (isDay ? '☀️' : '🌙');
     }
     
     saveLocation() {

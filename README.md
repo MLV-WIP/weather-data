@@ -1,12 +1,12 @@
 # Local Weather App
 
-A beautiful, responsive weather application that displays comprehensive weather data with dynamic rotating background images that reflect current weather conditions. Fully containerized with Docker for easy deployment, the app runs locally and provides detailed 7-day forecasts with temperature, precipitation, humidity, and air quality information.
+A beautiful, responsive weather application that displays comprehensive weather data with dynamic rotating background images that reflect current weather conditions. Fully containerized with Docker for easy deployment, the app runs locally and provides detailed 14-day forecasts with temperature, precipitation, humidity, and air quality information.
 
 ## Features
 
 ### 🌤️ Weather Data
 - **Current Conditions**: Real-time temperature, weather conditions, wind speed
-- **7-Day Forecast**: Daily high/low temperatures, precipitation chance, humidity
+- **14-Day Forecast**: Daily high/low temperatures, precipitation chance, humidity
 - **Air Quality**: AQI readings and health categories (when available)
 - **Auto-refresh**: Updates every 30 minutes automatically
 

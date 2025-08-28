@@ -63,7 +63,7 @@ app.get('/api/weather/current', async (req, res) => {
 
 app.get('/api/weather/forecast', async (req, res) => {
     try {
-        const { lat, lng, days = 7 } = req.query;
+        const { lat, lng, days = 14 } = req.query;
         
         if (!lat || !lng) {
             return res.status(400).json({ error: 'Latitude and longitude required' });

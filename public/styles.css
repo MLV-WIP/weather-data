@@ -188,6 +188,10 @@ body {
     color: var(--text-secondary);
     text-transform: capitalize;
     margin-bottom: var(--spacing-large);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
 .current-details {
@@ -280,6 +284,10 @@ body {
     font-size: 0.9rem;
     text-transform: capitalize;
     margin-bottom: var(--spacing-small);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
 }
 
 .forecast-details {

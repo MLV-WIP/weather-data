@@ -171,7 +171,7 @@ Key sections:
 - **Loading Overlay**: Shows while fetching initial data
 - **App Header**: Title, location display, last updated time
 - **Current Weather Panel**: Large temperature, conditions, humidity, air quality
-- **Forecast Section**: 7-day forecast cards
+- **Forecast Section**: 14-day forecast cards
 - **Location Modal**: Search interface and GPS controls
 - **Footer**: Refresh button and attribution
 

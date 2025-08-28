@@ -46,7 +46,7 @@ class WeatherService {
         }
     }
     
-    async getForecast(latitude, longitude, days = 7) {
+    async getForecast(latitude, longitude, days = 14) {
         const cacheKey = `forecast_${latitude}_${longitude}_${days}`;
         const cached = cacheService.get(cacheKey);
         
