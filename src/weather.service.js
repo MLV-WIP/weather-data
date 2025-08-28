@@ -19,7 +19,8 @@ class WeatherService {
                     longitude,
                     temperature_unit: 'fahrenheit',
                     wind_speed_unit: 'mph',
-                    current: 'temperature_2m,weathercode,windspeed_10m,winddirection_10m,is_day'
+                    current: 'temperature_2m,weathercode,windspeed_10m,winddirection_10m,is_day',
+                    timezone: 'auto'
                 }
             });
             
@@ -59,9 +60,10 @@ class WeatherService {
                 params: {
                     latitude,
                     longitude,
-                    daily: 'weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,relative_humidity_2m_mean',
+                    daily: 'weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,relative_humidity_2m_mean,sunrise,sunset',
                     temperature_unit: 'fahrenheit',
-                    forecast_days: days
+                    forecast_days: days,
+                    timezone: 'auto'
                 }
             });
             
@@ -78,7 +80,9 @@ class WeatherService {
                         tempMin: Math.round(daily.temperature_2m_min[index]),
                         condition: this.mapWeatherCode(daily.weathercode[index]),
                         precipitationChance: daily.precipitation_probability_max[index] || 0,
-                        humidity: Math.round(daily.relative_humidity_2m_mean[index] || 0)
+                        humidity: Math.round(daily.relative_humidity_2m_mean[index] || 0),
+                        sunrise: daily.sunrise[index],
+                        sunset: daily.sunset[index]
                     }))
                     .filter(day => day.date >= today) // Only include today and future dates
             };

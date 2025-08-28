@@ -278,6 +278,10 @@ class WeatherApp {
                 <span>💧 ${dayData.precipitationChance}%</span>
                 <span>💨 ${dayData.humidity}%</span>
             </div>
+            <div class="forecast-sun-times">
+                <span>🌅 ${this.formatTime(dayData.sunrise)}</span>
+                <span>🌇 ${this.formatTime(dayData.sunset)}</span>
+            </div>
         `;
         
         return card;
@@ -462,6 +466,21 @@ class WeatherApp {
         };
         
         return icons[condition] || (isDay ? '☀️' : '🌙');
+    }
+    
+    formatTime(isoString) {
+        if (!isoString) return '--';
+        
+        try {
+            const date = new Date(isoString);
+            return date.toLocaleTimeString('en-US', { 
+                hour: 'numeric', 
+                minute: '2-digit',
+                hour12: true 
+            });
+        } catch (error) {
+            return '--';
+        }
     }
     
     saveLocation() {

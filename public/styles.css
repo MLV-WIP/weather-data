@@ -297,6 +297,16 @@ body {
     color: var(--text-light);
 }
 
+.forecast-sun-times {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-top: var(--spacing-xs);
+    padding-top: var(--spacing-xs);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 /* Footer */
 .app-footer {
     text-align: center;
