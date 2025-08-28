@@ -67,15 +67,20 @@ class WeatherService {
             
             const daily = response.data.daily;
             
+            // Get today's date in YYYY-MM-DD format in local timezone
+            const today = new Date().toLocaleDateString('en-CA'); // ISO format YYYY-MM-DD
+            
             const forecastData = {
-                days: daily.time.map((date, index) => ({
-                    date,
-                    tempMax: Math.round(daily.temperature_2m_max[index]),
-                    tempMin: Math.round(daily.temperature_2m_min[index]),
-                    condition: this.mapWeatherCode(daily.weathercode[index]),
-                    precipitationChance: daily.precipitation_probability_max[index] || 0,
-                    humidity: Math.round(daily.relative_humidity_2m_mean[index] || 0)
-                }))
+                days: daily.time
+                    .map((date, index) => ({
+                        date,
+                        tempMax: Math.round(daily.temperature_2m_max[index]),
+                        tempMin: Math.round(daily.temperature_2m_min[index]),
+                        condition: this.mapWeatherCode(daily.weathercode[index]),
+                        precipitationChance: daily.precipitation_probability_max[index] || 0,
+                        humidity: Math.round(daily.relative_humidity_2m_mean[index] || 0)
+                    }))
+                    .filter(day => day.date >= today) // Only include today and future dates
             };
             
             // Cache for 1 hour
