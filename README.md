@@ -2,6 +2,10 @@
 
 A beautiful, responsive weather application that displays comprehensive weather data with dynamic rotating background images that reflect current weather conditions. Fully containerized with Docker for easy deployment, the app runs locally and provides detailed 14-day forecasts with temperature, precipitation, humidity, and air quality information.
 
+## Note
+
+This app was created entirely via iterative refinement with Claude code AI.
+
 ## Features
 
 ### 🌤️ Weather Data
